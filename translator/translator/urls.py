@@ -7,7 +7,8 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     url(r'^$', 'main.views.index'),
     url(r'^register/$', 'main.views.register'),
-    url(r'^success/$', 'main.views.success'),
+    url(r'^login/$', 'main.views.loginView'),
+    url(r'^logout/$', 'main.views.logoutView'),
     # Examples:
     # url(r'^$', 'translator.views.home', name='home'),
     # url(r'^translator/', include('translator.foo.urls')),
