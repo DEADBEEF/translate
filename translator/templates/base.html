@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css" />
+  </head>
+  <body>
+      <h2>From base template</h2>
+      <hr/>
+      This is a Test
+      {% if user %}
+        <div id="welcome">Welcome {{ user }}(<a href="/logout">logout</a>)</div>
+      {% else %}
+      <div id="welcome"><a href="/login">Login</a>/<a href="/register">Register</a></div>
+      {% endif %}
+      <hr/>
+      <div>
+          <div id="navigation">
+              <h3>Navigation</h3>
+            test lol <br/>
+            test
+            {% block navigation %}{% endblock %}
+          </div>
+          <div id="content">
+              {% block content %}{% endblock %}
+          </div>
+      </div>
+  </body>
+</html>
