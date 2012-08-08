@@ -2,45 +2,28 @@
 
 import os
 
-top = "/home/zuch/WWW/translate/archive"
+#globals
+top = "/home/zuch/WWW/translate/archive" #root directory of archive
+dir_list = []
 
-#tree Node class
-class Node(object):
+#returns array of Dicts with 'name' and 'depth' variables
+def parser(path):
   
-  def __init__(self,path,dirs):
-    self.path = path
-    self.dirs = dirs
- 
-#file_parser class 
-class file_parser: 
-
-  def __init__(self,top):
-    self.top = top  
+  startinglevel = path.count(os.sep)
   
-  base_dir = ""
-  archive_paths = {}
-  nodes = {}
+  for path, dirs, files in os.walk(path):
+    level = path.count(os.sep) - startinglevel
+    node = {'name': path, 'depth': level}
+    dir_list.append(node)
+    
+    #print level, ':', top
 
-  i = 0
-
-  for (top, dirs, files) in os.walk(top):
-    #print path
-    #print dirs
-    #print files
-    #print "--------------------"
-
-    i += 1
-    print i
-    if i == 4:
-      break
-  
-  startinglevel = top.count(os.sep)
-  for top, dirs, files in os.walk(top):
-    level = top.count(os.sep) - startinglevel
-    print level, ':', top 
-
-  print "end"
-
-  
+#-----------------------------------Main---------------------------------------        
 if __name__ == "__main__":
-  file_parser(top)
+  parser(top) 
+  
+  #for node in dir_list:
+    #print "depth:",node['depth'],"name:",node['name']
+
+  
+  
