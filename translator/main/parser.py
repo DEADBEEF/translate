@@ -41,6 +41,7 @@ if __name__ == "__main__":
     print "depth:",node.depth
     print "dirs:",node.dirs
     print "files:",node.files
+    print "-"*100
     i += 1
     if(i >= 4):
       break
