@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{story_title}}{% endblock %}
+
+{% block extra_css %}
+<script src="{{ STATIC_URL }}story.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}story.css"/>
+{% endblock %}
+
+
+{% block content %}
+<h3>{{story_title}}</h3>
+<div class="contributors">{{contributors}}</div>
+<div class="transopt">
+    {% if user %}
+    <h3>TRANSLATE OPTIONS</h3>
+    {% endif %}
+</div>
+<div class="pagenav">
+    Pages:
+    <div id="inner">
+    {% for i in pages %}
+        <span><a href="{{i}}">{{i}}</a></span>
+    {% endfor %}
+    </div>
+</div>
+<div id="created">{{date}}</div>
+<div id="tabContainer">
+    <div id="tabs">
+        <ul>
+            <li class="selected">Description</li>
+            <li>Comments</li>
+            <li>Subjects</li>
+            <li>Keywords</li>
+        </ul>
+    </div>
+    <div id="tabcontents">
+        <div class="content selected"><p>{{description}}</p></div>
+        <div class="content"><p>{{comments}}</p></div>
+        <div class="content">
+            <ul>
+                {% for sub in subjects %}
+                    <li>{{sub}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="content">
+            <dl>
+                {% for word, val in keywords %}
+                <dt>{{word}}</dt>
+                <dd>{{val}}
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}
