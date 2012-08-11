@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{book_title}}{% endblock %}
+
+{% block content %}
+<h3>{{ book_title }}</h3>
+<hr/>
+    <ol>
+    {% for story in book %}
+        <li><a href="{{story.url}}">{{story.name}}</a> ({{story.author}})</li>
+    {% endfor %}
+    </ol>
+{% endblock %}
