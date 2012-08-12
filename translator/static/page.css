@@ -1,8 +1,6 @@
 #image_container {
     float: left;
     display: inline-block;
-    border-style: solid;
-    border-width: 1px;
     width : 620px;
     height: 370px;
     overflow: auto;
@@ -29,20 +27,44 @@
 }
 
 #translate_block {
-    margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;
     display: inline-block;
     width: 48%;
     height: 350px;
-    border-style: solid;
-    border-width: 1px;
-
 }
+
+#translate_block textarea {
+    margin-top: -15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 99%;
+    height: 305px;
+    overflow: scroll;
+}
+
 #notes_block {
-    margin-top: 20px;
     display: inline-block;
+    margin-bottom: 20px;
     width: 48%;
     height: 350px;
-    border-style: solid;
-    border-width: 1px;
-
 }
+
+#notes_block textarea {
+    margin-top: -15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 99%;
+    height: 305px;
+    overflow: scroll;
+}
+
+#bottom_tools {
+    background-color: #c66;
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 35px;
+    margin-bottom: 15px;
+    width: 720px;
+}
+

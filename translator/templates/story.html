@@ -13,6 +13,10 @@
 <div class="contributors">{{contributors}}</div>
 <div class="transopt">
     {% if user %}
+        {% if project %}
+        {% else %}
+        <div id="project">Start Translation Project</div>
+        {% endif %}
     <h3>TRANSLATE OPTIONS</h3>
     {% endif %}
 </div>

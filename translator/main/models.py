@@ -16,6 +16,8 @@ class Story(models.Model):
     subject = models.TextField()
     keyword = models.TextField()
     pages = models.IntegerField()
+    def __unicode__(self):
+        return self.title
 
 class Page(models.Model):
     story = models.ForeignKey(Story)
