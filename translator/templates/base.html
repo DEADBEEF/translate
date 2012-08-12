@@ -2,6 +2,8 @@
   <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery.min.js"></script>
+    {% block extra_css %}{% endblock %}
   </head>
   <body>
       <h2>From base template</h2>

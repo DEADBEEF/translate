@@ -6,9 +6,14 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'main.views.index'),
+    # Login/Account urls
     url(r'^register/$', 'main.views.register'),
     url(r'^login/$', 'main.views.loginView'),
     url(r'^logout/$', 'main.views.logoutView'),
+    # Story
+    url(r'^story/(?P<book>\w+)/$', 'main.views.notebook'),
+    url(r'^story/(?P<book>\w+)/(?P<story>\w+)/$', 'main.views.story'),
+    url(r'^story/(?P<book>\w+)/(?P<story>\w+)/(?P<page>\d+)/$', 'main.views.page'),
     # Examples:
     # url(r'^$', 'translator.views.home', name='home'),
     # url(r'^translator/', include('translator.foo.urls')),

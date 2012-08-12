@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{story_title}} Page - {{page_num}}{% endblock %}
+
+{% block content %}
+<h3>{{ story_title }}</h3>
+<div id="page_num">
+    <div id="page_id">Page - {{page_num}}</div>
+    {% for p in pages %}
+        {% if p == page_num %}
+        <span>{{p}}</span>
+        {% else %}
+        <span><a href="../{{p}}/">{{p}}</a></span>
+        {% endif %}
+    {% endfor %}
+</div>
+<div id="image_container">
+    <img src="{{ STATIC_URL }}/test.jpg"/>
+</div>
+{% if user %}
+TRANSLATE THINGS
+{% endif %}
+{% endblock %}
