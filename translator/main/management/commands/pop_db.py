@@ -1,13 +1,16 @@
 import os
 import uuid
 import json
+import time
 from django.core.management.base import BaseCommand, CommandError
 from main.models import Page, Notebook, Story
 from xml.dom.minidom import parse, parseString # DOM
-from timeit import Timer
 
 #globals
-top = "/home/swatermeyer/WWW/translate/archive/lloydbleek/stories/" #root directory of stories archive
+top = "" #root directory of stories archive
+story_path = "/translate/archive/lloydbleek/stories/"
+s_count = 0 #story count
+n_count = 0 #notebook count
 
 #node class
 class node:
@@ -25,11 +28,15 @@ class node:
 class Command(BaseCommand):
     args = ""
     def handle(self, *args, **options):
-      print "die die die die"
+      print "Enter Directory e.g. /home/zuch/WWW"
+      root = raw_input()
+      top = root + story_path
+      print "path: ", top
+      
       start = time.clock()
-      popdb()
+      #popdb()
       end = time.clock()
-      print 'Code time %.6f seconds' % (end - start)
+      print 'Code time %.2f seconds' % (end - start)
 	  
 	  
 #returns array of node objects for a given path
@@ -67,7 +74,7 @@ def popdb():
 #parses notebook metadata files
 def notebook_meta(filename):
   
-  print "notebook_meta"
+  print "notebook ", n_count
   dom = parse(top+filename)
   resource = dom.getElementsByTagName("resource")[0]
   nb = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
@@ -76,11 +83,12 @@ def notebook_meta(filename):
   notebook = Notebook(title=nb, short_title=short)
   notebook.save()
   
-  hasPart = [resource.getElementsByTagName("dcterms:hasPart")]  
+  hasPart = [resource.getElementsByTagName("dcterms:hasPart")] 
+  n_count+=1
   
 #parses story metadata files
 def story_meta(filename, path):
-  print "story_meta"
+  print "story ", s_count
   notebook_name = path.split("/")[-1][:-9]
   dom = parse(path+"/"+filename)
   resource = dom.getElementsByTagName("resource")[0]
@@ -128,6 +136,5 @@ def story_meta(filename, path):
     page_entry = Page(story = story, filename = page_path, uuid = page_uuid)
     page_entry.save()
   
-  
-  
-
+  print "# pages: ", pages
+  s_count+=1
