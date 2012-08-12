@@ -1,9 +1,10 @@
 import os
-
+import uuid
+import json
 from django.core.management.base import BaseCommand, CommandError
 from main.models import Page, Notebook, Story
 from xml.dom.minidom import parse, parseString # DOM
-import json
+from timeit import Timer
 
 #globals
 top = "/home/swatermeyer/WWW/translate/archive/lloydbleek/stories/" #root directory of stories archive
@@ -23,10 +24,12 @@ class node:
 
 class Command(BaseCommand):
     args = ""
-    
     def handle(self, *args, **options):
       print "die die die die"
+      start = time.clock()
       popdb()
+      end = time.clock()
+      print 'Code time %.6f seconds' % (end - start)
 	  
 	  
 #returns array of node objects for a given path
@@ -44,7 +47,6 @@ def parse_path(path):
  
 #populate database
 def popdb():
-  print "popdb"
   nodes = parse_path(top)
   
   i = 0
@@ -78,15 +80,16 @@ def notebook_meta(filename):
   
 #parses story metadata files
 def story_meta(filename, path):
-  notebook_name = path.split("/")[-1][:-9]
   print "story_meta"
+  notebook_name = path.split("/")[-1][:-9]
   dom = parse(path+"/"+filename)
   resource = dom.getElementsByTagName("resource")[0]
   story_title = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
   raw_contrib = [x.firstChild.nodeValue
       for x in resource.getElementsByTagName("dcterms:contributor") ]
   contrib = json.dumps(raw_contrib)
-  pages = len(resource.getElementsByTagName("dcterms:requires"))
+  required = resource.getElementsByTagName("dcterms:requires")
+  pages = len(required)
   try:
     date = resource.getElementsByTagName("dcterms:created")[0].firstChild.nodeValue
   except AttributeError:
@@ -113,27 +116,17 @@ def story_meta(filename, path):
   except AttributeError:
     pass
   keyword = json.dumps(raw_keywords)
-  notebook = Notebook.object.get(short_title=notebook_name)[0]
-  
+  notebook = Notebook.objects.get(short_title=notebook_name)
   
   story = Story(notebook=notebook, title=story_title, created=date, description=description, 
-		comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages
+		comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages )
   story.save()
-    
-#-----------------------------------Main---------------------------------------
-if __name__ == "__main__":
-  nodes = parse_path(top)
-    
-  i = 0
-  for node in nodes:
-    print "path:", node.path
-    print "depth:",node.depth
-    print "dirs:",node.dirs
-    print "files:",node.files
-    print "-"*100
-    i += 1
-    if(i >= 7):
-      break
+  
+  for page in required:
+    page_path = page.firstChild.nodeValue
+    page_uuid = uuid.uuid4()
+    page_entry = Page(story = story, filename = page_path, uuid = page_uuid)
+    page_entry.save()
   
   
   
