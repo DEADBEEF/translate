@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}page.css"/>
+<script type="text/javascript" src="{{STATIC_URL}}page.js"></script>
+{% endblock %}
+
 {% block title %}{{story_title}} Page - {{page_num}}{% endblock %}
 
 {% block content %}
@@ -18,6 +23,14 @@
     <img src="{{ STATIC_URL }}/test.jpg"/>
 </div>
 {% if user %}
-TRANSLATE THINGS
+<div id="notes_nav">
+    <span>Project Notes</span>
+</div>
+<div id="translate_block">
+    <textarea></textarea>
+</div>
+<div id="notes_block">
+    <textarea></textarea>
+</div>
 {% endif %}
 {% endblock %}
