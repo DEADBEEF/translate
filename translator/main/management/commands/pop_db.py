@@ -34,7 +34,7 @@ class Command(BaseCommand):
       print "path: ", top
       
       start = time.clock()
-      #popdb()
+      popdb()
       end = time.clock()
       print 'Code time %.2f seconds' % (end - start)
 	  

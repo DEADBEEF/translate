@@ -138,7 +138,3 @@ def story_meta(filename, path):
   
   print "# pages: ", pages
   s_count+=1
-  
-  
-  
-
