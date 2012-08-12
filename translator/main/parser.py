@@ -3,7 +3,7 @@
 import os
 
 #globals
-top = "/home/zuch/WWW/translate/archive" #root directory of archive
+top = "/home/swatermeyer/WWW/translate/archive" #root directory of archive
 
 #node class
 class node:
