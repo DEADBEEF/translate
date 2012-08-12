@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     url(r'^story/(?P<book>\w+)/(?P<story>\w+)/$', 'main.views.story'),
     url(r'^story/(?P<book>\w+)/(?P<story>\w+)/(?P<page>\d+)/$', 'main.views.page'),
     # Examples:
+    #AJAX
+    url(r'^project/start/$', 'main.views.start_project'),
     # url(r'^$', 'translator.views.home', name='home'),
     # url(r'^translator/', include('translator.foo.urls')),
 
