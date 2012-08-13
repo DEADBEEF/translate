@@ -1,11 +1,13 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from django.http import Http404
 
 # DOM
 from xml.dom.minidom import parse, parseString
 
+from main.models import *
 from main.forms import *
 
 def responseDict(request,base):
@@ -30,9 +32,21 @@ def notebook(request, book):
 
 def story(request, book, story):
     #Should be filled in from books
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_book = Story.objects.get(notebook=notebook,id=story)
+    except:
+        raise Http404
+    base = {}
+    if request.user.is_authenticated():
+        #project
+        try:
+            project = Project.objects.get(user=request.user,story=story_book)
+            base["project"] = True
+        except:
+            pass
     dom = parse("/home/michiel/git/translate/101.metadata")
     resource = dom.getElementsByTagName("resource")[0]
-    base = {}
     base["story_title"] = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
     base["contributors"] = ", ".join([x.firstChild.nodeValue
         for x in resource.getElementsByTagName("dcterms:contributor") ])
@@ -53,11 +67,21 @@ def story(request, book, story):
     return render(request, 'story.html' , responseDict(request,base))
 
 def page(request, book, story, page):
-    dom = parse("/home/michiel/git/translate/101.metadata")
-    resource = dom.getElementsByTagName("resource")[0]
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_book = Story.objects.get(notebook=notebook,id=story)
+    except:
+        raise Http404
     base = {}
-    base["story_title"] = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
-    base["pages"] = xrange(1,len(resource.getElementsByTagName("dcterms:requires"))+1)
+    if request.user.is_authenticated():
+        #project
+        try:
+            project = Project.objects.get(user=request.user,story=story_book)
+            base["project"] = True
+        except:
+            pass
+    base["story_title"] = story_book.title
+    base["pages"] = xrange(1,story_book.pages+1)
     base["page_num"] = int(page)
     return render(request, 'page.html' , responseDict(request,base))
 
@@ -98,4 +122,25 @@ def logoutView(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+#AJAX
+def start_project(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            query = request.POST
+            book = query["book"]
+            story=query["story"]
+            try:
+                print book,story
+                notebook = Notebook.objects.get(short_title=book)
+                story_book = Story.objects.get(notebook=notebook,id=story)
+                print notebook.short_title, story_book.id
+            except:
+                raise Http404
+            obj, created = Project.objects.get_or_create(user=request.user,story=story_book,
+                    defaults={"notes":""})
+            return HttpResponse(str(created))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseBadRequest()
 
