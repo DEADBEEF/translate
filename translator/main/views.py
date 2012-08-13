@@ -24,15 +24,16 @@ def notebook(request, book):
     #Should be filled in from notebook
     try:
         notebook = Notebook.objects.get(short_title=book)
-        story_book = Story.objects.filter(notebook=notebook)
+        story_list = Story.objects.filter(notebook=notebook)
     except:
         raise Http404
     base = {}
-    base["book_title"] = "Wilhelm Bleek Notebooksss"
-    stories = [{"name": "The Mantis turned into a hartebeest.",
-        "author": "|| kabo (Jantje)", "url":("/%s/%s/" % (book, "101")) },
-        {"name": "The Mantis turned is a bitch.",
-        "author": "|| kabo ()", "url":("/%s/%s/" % (book, "102")) }]
+    base["book_title"] = notebook.title
+    stories = []
+    for story in story_list:
+        current_story = {"name": story.title,
+        "author": ", ".join(json.loads(story.contributor)), "url":("/story/%s/%s/" % (notebook.short_title, story.id)) }
+        stories.append(current_story)
     base["book"] = stories
     return render(request, 'notebook.html' , responseDict(request,base))
 
