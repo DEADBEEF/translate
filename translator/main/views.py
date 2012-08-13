@@ -52,6 +52,8 @@ def story(request, book, story):
         try:
             project = Project.objects.get(user=request.user,story=story_book)
             base["project"] = True
+            trans = Translation.objects.get(project=project,page=page)
+            base["trans"] = trans.translation
         except:
             pass
     base["story_title"] = story_book.title
@@ -77,6 +79,8 @@ def page(request, book, story, page):
         try:
             project = Project.objects.get(user=request.user,story=story_book)
             base["project"] = True
+            trans = Translation.objects.get(project=project,page=page_object)
+            base["trans"] = trans.translation
         except:
             pass
     base["story_title"] = story_book.title
@@ -129,7 +133,6 @@ def get_image(request, image):
         raise Http404
     filename = page.filename
     response = HttpResponse(mimetype='image/jpeg')
-    print "HERE"
     try:
         f = file(MEDIA_ROOT+ filename)
     except:
@@ -145,10 +148,8 @@ def start_project(request):
             book = query["book"]
             story=query["story"]
             try:
-                print book,story
                 notebook = Notebook.objects.get(short_title=book)
                 story_book = Story.objects.get(notebook=notebook,id=story)
-                print notebook.short_title, story_book.id
             except:
                 raise Http404
             obj, created = Project.objects.get_or_create(user=request.user,story=story_book,
@@ -159,3 +160,27 @@ def start_project(request):
     else:
         return HttpResponseBadRequest()
 
+def update_page_translation(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            query = request.POST
+            translation = query["translation"]
+            notebook_name = query["notebook"]
+            story_name = query["story"]
+            page_num = query["page"]
+            try:
+                notebook = Notebook.objects.get(short_title=notebook_name)
+                story_book = Story.objects.get(notebook=notebook,id=story_name)
+                page = Page.objects.get(story=story_book,number=page_num)
+            except:
+                raise Http404
+            project, created = Project.objects.get_or_create(user=request.user,story=story_book,
+                    defaults={"notes":""})
+            trans, created = Translation.objects.get_or_create(project=project,page=page)
+            trans.translation = translation
+            trans.save()
+            return HttpResponse("good")
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseBadRequest()
