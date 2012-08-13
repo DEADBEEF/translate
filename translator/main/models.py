@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 class Notebook(models.Model):
     title = models.CharField(max_length=50,primary_key=True)
     short_title = models.CharField(max_length=10,db_index=True)
+    def __unicode__(self):
+        return self.title
 
 class Story(models.Model):
     notebook = models.ForeignKey(Notebook)
@@ -22,12 +24,17 @@ class Story(models.Model):
 class Page(models.Model):
     story = models.ForeignKey(Story)
     filename = models.TextField()
+    number = models.IntegerField()
     uuid = models.CharField(max_length=40,db_index=True)
+    def __unicode__(self):
+        return self.story.title+" "+unicode(self.number)
 
 class Project(models.Model):
     user = models.ForeignKey(User)
     story = models.ForeignKey(Story)
     notes = models.TextField()
+    def __unicode__(self):
+        return unicode(self.user)+" "+self.story.title
 
 class Translation(models.Model):
     project = models.ForeignKey(Project)
