@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^story/(?P<book>\w+)/$', 'main.views.notebook'),
     url(r'^story/(?P<book>\w+)/(?P<story>\w+)/$', 'main.views.story'),
     url(r'^story/(?P<book>\w+)/(?P<story>\w+)/(?P<page>\d+)/$', 'main.views.page'),
+    url(r'^image/(?P<image>[\w\-]+)/$', 'main.views.get_image'),
     # Examples:
     #AJAX
     url(r'^project/start/$', 'main.views.start_project'),

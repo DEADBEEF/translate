@@ -11,6 +11,8 @@ from xml.dom.minidom import parse, parseString
 from main.models import *
 from main.forms import *
 
+MEDIA_ROOT = ""
+
 def responseDict(request,base):
     if request.user.is_authenticated:
         base['user'] = request.user.username
@@ -66,6 +68,7 @@ def page(request, book, story, page):
     try:
         notebook = Notebook.objects.get(short_title=book)
         story_book = Story.objects.get(notebook=notebook,id=story)
+        page_object = Page.objects.get(story=story_book,number=page)
     except:
         raise Http404
     base = {}
@@ -79,6 +82,7 @@ def page(request, book, story, page):
     base["story_title"] = story_book.title
     base["pages"] = xrange(1,story_book.pages+1)
     base["page_num"] = int(page)
+    base["uuid"] = page_object.uuid
     return render(request, 'page.html' , responseDict(request,base))
 
 
@@ -117,6 +121,21 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+def get_image(request, image):
+    try:
+        page = Page.objects.get(uuid=image)
+    except:
+        raise Http404
+    filename = page.filename
+    response = HttpResponse(mimetype='image/jpeg')
+    print "HERE"
+    try:
+        f = file(MEDIA_ROOT+ filename)
+    except:
+        raise Http404
+    response.write(f.read())
+    return response
 
 #AJAX
 def start_project(request):
