@@ -1,13 +1,14 @@
 import os
 import uuid
 import json
+import time
 from django.core.management.base import BaseCommand, CommandError
 from main.models import Page, Notebook, Story
 from xml.dom.minidom import parse, parseString # DOM
 from timeit import Timer
 
 #globals
-top = "/home/swatermeyer/WWW/translate/archive/lloydbleek/stories/" #root directory of stories archive
+top = "/home/ttrewartha/www/archive/lloydbleek/stories/" #root directory of stories archive
 
 #node class
 class node:
@@ -121,11 +122,12 @@ def story_meta(filename, path):
   story = Story(notebook=notebook, title=story_title, created=date, description=description, 
 		comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages )
   story.save()
-  
+  i=1
   for page in required:
     page_path = page.firstChild.nodeValue
     page_uuid = uuid.uuid4()
-    page_entry = Page(story = story, filename = page_path, uuid = page_uuid)
+    page_entry = Page(story = story, filename = page_path, uuid = page_uuid,number=i)
+    i+=1
     page_entry.save()
   
   

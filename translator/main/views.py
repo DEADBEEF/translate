@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.http import Http404
 
 # DOM
+import json
 from xml.dom.minidom import parse, parseString
 
 from main.models import *
@@ -20,9 +21,14 @@ def index(request):
     return render(request, 'index.html',responseDict(request,{}))
 
 def notebook(request, book):
-    #Should be filled in from books
+    #Should be filled in from notebook
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_book = Story.objects.filter(notebook=notebook)
+    except:
+        raise Http404
     base = {}
-    base["book_title"] = "Wilhelm Bleek Notebook"
+    base["book_title"] = "Wilhelm Bleek Notebooksss"
     stories = [{"name": "The Mantis turned into a hartebeest.",
         "author": "|| kabo (Jantje)", "url":("/%s/%s/" % (book, "101")) },
         {"name": "The Mantis turned is a bitch.",
@@ -31,7 +37,7 @@ def notebook(request, book):
     return render(request, 'notebook.html' , responseDict(request,base))
 
 def story(request, book, story):
-    #Should be filled in from books
+    #Should be filled in from story
     try:
         notebook = Notebook.objects.get(short_title=book)
         story_book = Story.objects.get(notebook=notebook,id=story)
@@ -45,25 +51,14 @@ def story(request, book, story):
             base["project"] = True
         except:
             pass
-    dom = parse("/home/michiel/git/translate/101.metadata")
-    resource = dom.getElementsByTagName("resource")[0]
-    base["story_title"] = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
-    base["contributors"] = ", ".join([x.firstChild.nodeValue
-        for x in resource.getElementsByTagName("dcterms:contributor") ])
-    base["pages"] = xrange(1,len(resource.getElementsByTagName("dcterms:requires"))+1)
-    base["date"] = resource.getElementsByTagName("dcterms:created")[0].firstChild.nodeValue
-    base["description"] = resource.getElementsByTagName("dc:description")[0].firstChild.nodeValue
-    base["comments"] = resource.getElementsByTagName("bl:comments")[0].firstChild.nodeValue
-    base["subjects"] = [sub.firstChild.nodeValue for sub in resource.getElementsByTagName("dc:subject")]
-    keywords = []
-    temp = dom.getElementsByTagName("bl:keywords")[0]
-    for word in temp.getElementsByTagName("bl:keyword"):
-        k = word.getElementsByTagName("bl:kw")[0].firstChild.nodeValue
-        subkw = word.getElementsByTagName("bl:subkeywords")[0]
-        v = ", ".join(sub.firstChild.nodeValue
-                for sub in subkw.getElementsByTagName("bl:subkw"))
-        keywords.append((k, v))
-    base["keywords"] = keywords
+    base["story_title"] = story_book.title
+    base["contributors"] = ", ".join(json.loads(story_book.contributor))
+    base["pages"] = xrange(1,story_book.pages+1)
+    base["date"] = story_book.created
+    base["description"] = story_book.description
+    base["comments"] = story_book.comment
+    base["subjects"] = json.loads(story_book.subject)
+    base["keywords"] = json.loads(story_book.keyword)
     return render(request, 'story.html' , responseDict(request,base))
 
 def page(request, book, story, page):
