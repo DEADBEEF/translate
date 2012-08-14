@@ -115,6 +115,10 @@
     color: #11c;
 }
 
+#left-nav  a:hover{
+    color: #c11;
+}
+
 #left-nav h3 { margin: 0; }
 
 #left-nav ul

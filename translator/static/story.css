@@ -38,6 +38,10 @@
 
 #project:hover {
     cursor: pointer;
+    color: #22c;
+    background: #ccc;
+    border-style: solid;
+    border-color: #22c;
 }
 
 .pagenav {
