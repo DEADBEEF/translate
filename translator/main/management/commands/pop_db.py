@@ -5,12 +5,10 @@ import time
 from django.core.management.base import BaseCommand, CommandError
 from main.models import Page, Notebook, Story
 from xml.dom.minidom import parse, parseString # DOM
+from timeit import Timer
 
 #globals
-top = "" #root directory of stories archive
-story_path = "/translate/archive/lloydbleek/stories/"
-s_count = 0 #story count
-n_count = 0 #notebook count
+top = "/home/zuch/WWW/translate/archive/lloydbleek/stories/" #root directory of stories archive
 
 #node class
 class node:
@@ -28,17 +26,13 @@ class node:
 class Command(BaseCommand):
     args = ""
     def handle(self, *args, **options):
-      print "Enter Directory e.g. /home/zuch/WWW"
-      root = raw_input()
-      top = root + story_path
-      print "path: ", top
-      
+      print "die die die die"
       start = time.clock()
       popdb()
       end = time.clock()
-      print 'Code time %.2f seconds' % (end - start)
-
-
+      print 'Code time %.2f seconds', (end - start)
+	  
+	  
 #returns array of node objects for a given path
 def parse_path(path):
   
@@ -61,20 +55,20 @@ def popdb():
     if(i == 0):#populate notebook models
       nb_meta = node.files
       for filename in nb_meta:
-notebook_meta(filename)
+	notebook_meta(filename)
     
     if (len(node.path) > len(top) ):#populate story models
       s_meta = node.files
       for filename in s_meta:
-path = node.path
-story_meta(filename, path)
-
+	path = node.path
+	story_meta(filename, path)
+	
     i+=1
 
 #parses notebook metadata files
 def notebook_meta(filename):
   
-  print "notebook ", n_count
+  print "notebook_meta"
   dom = parse(top+filename)
   resource = dom.getElementsByTagName("resource")[0]
   nb = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
@@ -83,12 +77,11 @@ def notebook_meta(filename):
   notebook = Notebook(title=nb, short_title=short)
   notebook.save()
   
-  hasPart = [resource.getElementsByTagName("dcterms:hasPart")]
-  n_count+=1
+  hasPart = [resource.getElementsByTagName("dcterms:hasPart")]  
   
 #parses story metadata files
 def story_meta(filename, path):
-  print "story ", s_count
+  print "story_meta"
   notebook_name = path.split("/")[-1][:-9]
   dom = parse(path+"/"+filename)
   resource = dom.getElementsByTagName("resource")[0]
@@ -116,25 +109,27 @@ def story_meta(filename, path):
   try:
     temp = dom.getElementsByTagName("bl:keywords")[0]
     for word in temp.getElementsByTagName("bl:keyword"):
-k = word.getElementsByTagName("bl:kw")[0].firstChild.nodeValue
-subkw = word.getElementsByTagName("bl:subkeywords")[0]
-v = ", ".join(sub.firstChild.nodeValue
-for sub in subkw.getElementsByTagName("bl:subkw"))
-raw_keywords.append((k, v))
+	k = word.getElementsByTagName("bl:kw")[0].firstChild.nodeValue
+	subkw = word.getElementsByTagName("bl:subkeywords")[0]
+	v = ", ".join(sub.firstChild.nodeValue
+		for sub in subkw.getElementsByTagName("bl:subkw"))
+	raw_keywords.append((k, v))
   except AttributeError:
     pass
   keyword = json.dumps(raw_keywords)
   notebook = Notebook.objects.get(short_title=notebook_name)
   
-  story = Story(notebook=notebook, title=story_title, created=date, description=description,
-comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages )
+  story = Story(notebook=notebook, title=story_title, created=date, description=description, 
+		comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages )
   story.save()
-  
+  i=1
   for page in required:
     page_path = page.firstChild.nodeValue
     page_uuid = uuid.uuid4()
-    page_entry = Page(story = story, filename = page_path, uuid = page_uuid)
+    page_entry = Page(story = story, filename = page_path, uuid = page_uuid,number=i)
+    i+=1
     page_entry.save()
   
-  print "# pages: ", pages
-  s_count+=1
+  
+  
+
