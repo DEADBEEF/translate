@@ -96,7 +96,7 @@
 	padding: 20px 0 100px;
 	margin: 0px 20px 15px 0;
 	display: inline;
-	background-color: #CFCFF4;
+	background-color: #ccc;
 	/*border:1px solid #a1a1a1;*/
 	border-bottom-right-radius:20px;
 	-moz-border-bottom-right-radius:20px;
@@ -116,7 +116,7 @@
 }
 
 #left-nav  a:hover{
-    color: #c11;
+    color: #000;
 }
 
 #left-nav h3 { margin: 0; }
