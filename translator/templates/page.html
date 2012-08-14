@@ -24,17 +24,24 @@
 </div>
 {% if project %}
 <div id="notes_nav">
-    <span>Project Notes</span>
+    <span id="project_notes">Project Notes</span>
+    <ul>
+    {% for i in pages %}
+        <li id="{{i}}">Page {{i}}</li>
+    {% endfor %}
+    </ul>
 </div>
+<span id="current_page">{{page_num}}</span>
 <div id="bottom_tools">
     <div id="translate_block">
         <h3>Translation:</h3>
-        <textarea></textarea>
+        <textarea id="translation">{{trans}}</textarea>
     </div>
     <div id="notes_block">
-        <h3>Notes:</h3>
-        <textarea></textarea>
+        <h3>Page {{page_num}} Notes:</h3>
+        <textarea id="note_area">{{notes}}</textarea>
     </div>
+    <div id="save_block"><button id="save">Save Changes</button></div>
 </div>
 {% endif %}
 {% endblock %}

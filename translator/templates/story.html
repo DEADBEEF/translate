@@ -14,6 +14,7 @@
 <div class="transopt">
     {% if user %}
         {% if project %}
+        <div id="project_started">Translation Project Started</div>
         {% else %}
         <div id="project">Start Translation Project</div>
         {% endif %}
@@ -36,6 +37,11 @@
             <li>Comments</li>
             <li>Subjects</li>
             <li>Keywords</li>
+            {% if user %}
+            {% if project %}
+            <li>Project Notes</li>
+            {% endif %}
+            {% endif %}
         </ul>
     </div>
     <div id="tabcontents">
@@ -56,6 +62,11 @@
                 {% endfor %}
             </dl>
         </div>
+        {% if user %}
+        {% if project %}
+        <div class="content">{{notes}}</div>
+        {% endif %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

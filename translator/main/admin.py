@@ -10,7 +10,7 @@ class PageAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('user','story')
 class TranslationAdmin(admin.ModelAdmin):
-    list_display = ('project','page')
+    list_display = ('id','project','page')
 
 admin.site.register(Notebook,NotebookAdmin)
 admin.site.register(Story,StoryAdmin)

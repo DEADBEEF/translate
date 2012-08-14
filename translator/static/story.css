@@ -20,6 +20,19 @@
     background-color: blue;
     color: white;
     border-style: solid;
+    border-color: #c11;
+}
+
+#project_started {
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-left:20px;
+    width: 180px;
+    margin-left: 30px;
+    margin-top:20px;
+    background-color: #2c2;
+    color: #222;
+    border-style: solid;
     border-color: #22c;
 }
 
