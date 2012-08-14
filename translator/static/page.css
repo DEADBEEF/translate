@@ -1,3 +1,6 @@
+#current_page {
+    display: none;
+}
 #image_container {
     float: left;
     display: inline-block;
@@ -16,6 +19,21 @@
     height: 700px;
 }
 
+#save_block {
+    display:none;
+    text-align: center;
+    width: 100%;
+}
+
+#save_block.changed {
+    display:block;
+}
+#save{
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #notes_nav {
     display:inline-block;
     float:left;
@@ -24,6 +42,31 @@
     border-style: solid;
     border-width: 1px;
     margin-left: 10px;
+}
+
+#notes_nav > ul{
+    height: 330px;
+    overflow: auto;
+    margin-top: 0px;
+    margin-left: -5px;
+}
+
+#notes_nav > ul > li{
+    display:block;
+}
+
+#notes_nav > ul > li:hover{
+    cursor: pointer;
+    text-decoration:underline;
+}
+
+#project_notes {
+    margin-left: 5px;
+}
+
+#project_notes:hover {
+    cursor: pointer;
+    text-decoration:underline;
 }
 
 #translate_block {
