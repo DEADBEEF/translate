@@ -39,6 +39,17 @@ $(document).ready(function () {
             "story":loc[3]},
             function(result) {
                 $("#project").remove();
+                $('.transopt').append("<div id=\"project_started\">Translation Project Started</div>");
+                $('#tabContainer > #tabs > ul').append("<li>Project Notes</li>");
+                $('#tabContainer > #tabcontents').append("<div class=\"content\"></div>");
+                $("#tabs li").bind('click', function() {
+		        var index = $(this).index();
+		        $("#tabcontents .content").removeClass("selected");
+		        $("#tabs li").removeClass("selected");
+		        $(this).addClass("selected");
+		        var a = $("#tabcontents .content").get(index);
+		        $(a).addClass("selected");
+                });
         });
     });
 });

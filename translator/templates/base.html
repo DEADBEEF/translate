@@ -9,16 +9,13 @@
     <body>
         <div id="head-container">
             <div id="header">
-                <h1>
-                    Digital Bleek and Lloyd Translation Project
-                </h1>
+                <a href="/"><h1>Digital Bleek and Lloyd Translation Project</h1></a>
             </div>
         </div>
         <div id="navigation-container">
             <div id="navigation">
-		
-                {% if user %}
-                <div id="welcome">Welcome {{ user }}(<a href="/logout">logout</a>)</div>
+                {% if user_o %}
+                <div id="welcome">Welcome {{ user_o }}<a href="/logout">logout</a></div>
                 {% else %}
                 <div id="welcome">
 		  <a href="/login">Login</a>
@@ -29,10 +26,16 @@
         </div>
         <div id="content-container">
             <div id="left-nav">
+	      {% if user_o %}
 	      <div id="project-nav">
 		  <h3>Projects</h3>
-		  </br>
+		  <ul>
+                  {% for url_r, p in projects %}
+                    <a href="{{url_r}}"><li>{{p}}</li></a>
+                  {% endfor %}       
+		  </ul>
 		</div>
+	      {% endif %}
 	      <div id="story-nav">
 		  <h3>Stories</h3>
 		  <ul>

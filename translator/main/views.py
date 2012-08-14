@@ -11,11 +11,16 @@ from xml.dom.minidom import parse, parseString
 from main.models import *
 from main.forms import *
 
-MEDIA_ROOT = ""
+MEDIA_ROOT = "/home/ttrewartha/www/archive/lloydbleek/"
 
 def responseDict(request,base):
-    if request.user.is_authenticated:
-        base['user'] = request.user.username
+    print int(request.user.is_authenticated())
+    if request.user.is_authenticated():
+        print "test"
+        base['user_o'] = request.user.username
+        base['projects'] = [ ( ("/story/%s/%s/" % (pro.story.notebook.short_title, 
+                                       pro.story.id)), pro.story.title)
+                                       for pro in Project.objects.filter(user=request.user) ]
     return base
 
 # Create your views here.
@@ -87,6 +92,10 @@ def page(request, book, story, page):
     base["story_title"] = story_book.title
     base["pages"] = xrange(1,story_book.pages+1)
     base["page_num"] = int(page)
+    if base["page_num"] != story_book.pages:
+        base["page_next"] = int(page) + 1
+    if base["page_num"] != 1:
+        base["page_prev"] = int(page) - 1
     base["uuid"] = page_object.uuid
     return render(request, 'page.html' , responseDict(request,base))
 
@@ -101,8 +110,9 @@ def register(request):
             password  = form.cleaned_data["password"]
             User.objects.create_user(username,email,password)
             user = authenticate(username=username,password=password)
-            login(request,user)
-            return HttpResponseRedirect("/")
+            if user.is_authenticated():
+                login(request,user)
+                return HttpResponseRedirect("/")
         #process
     else:
         form = RegisterForm()
@@ -117,8 +127,9 @@ def loginView(request):
             username = form.cleaned_data["username"]
             password  = form.cleaned_data["password"]
             user = authenticate(username=username,password=password)
-            login(request,user)
-            return HttpResponseRedirect("/")
+            if user != None:
+                login(request,user)
+                return HttpResponseRedirect("/")
     else:
         form = LoginForm()
     return render(request,'login.html',responseDict(request,{'form': form}))

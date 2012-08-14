@@ -12,13 +12,12 @@
 <h3>{{story_title}}</h3>
 <div class="contributors">{{contributors}}</div>
 <div class="transopt">
-    {% if user %}
+    {% if user_o %}
         {% if project %}
         <div id="project_started">Translation Project Started</div>
         {% else %}
         <div id="project">Start Translation Project</div>
         {% endif %}
-    <h3>TRANSLATE OPTIONS</h3>
     {% endif %}
 </div>
 <div class="pagenav">
@@ -37,7 +36,7 @@
             <li>Comments</li>
             <li>Subjects</li>
             <li>Keywords</li>
-            {% if user %}
+            {% if user_o %}
             {% if project %}
             <li>Project Notes</li>
             {% endif %}
@@ -62,7 +61,7 @@
                 {% endfor %}
             </dl>
         </div>
-        {% if user %}
+        {% if user_o %}
         {% if project %}
         <div class="content">{{notes}}</div>
         {% endif %}
