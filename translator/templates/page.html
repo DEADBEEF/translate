@@ -8,7 +8,7 @@
 {% block title %}{{story_title}} Page - {{page_num}}{% endblock %}
 
 {% block content %}
-<h3>{{ story_title }}</h3>
+<a href=".."><h3>{{ story_title }}</h3></a>
 <div id="page_num">
     <div id="page_id">Page - {{page_num}}</div>
     {% for p in pages %}
@@ -20,17 +20,21 @@
     {% endfor %}
 </div>
 <div id="image_container">
-    <img src="{{ STATIC_URL }}/test.jpg"/>
+    <img src="/image/{{uuid}}/"/>
 </div>
-{% if user %}
+{% if project %}
 <div id="notes_nav">
     <span>Project Notes</span>
 </div>
-<div id="translate_block">
-    <textarea></textarea>
-</div>
-<div id="notes_block">
-    <textarea></textarea>
+<div id="bottom_tools">
+    <div id="translate_block">
+        <h3>Translation:</h3>
+        <textarea></textarea>
+    </div>
+    <div id="notes_block">
+        <h3>Notes:</h3>
+        <textarea></textarea>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

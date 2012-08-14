@@ -7,10 +7,14 @@ from main.models import Page, Notebook, Story
 from xml.dom.minidom import parse, parseString # DOM
 
 #globals
+<<<<<<< HEAD
 top = "" #root directory of stories archive
 story_path = "/translate/archive/lloydbleek/stories/"
 s_count = 0 #story count
 n_count = 0 #notebook count
+=======
+top = "/home/ttrewartha/www/archive/lloydbleek/stories/" #root directory of stories archive
+>>>>>>> origin/master
 
 #node class
 class node:
@@ -129,11 +133,12 @@ def story_meta(filename, path):
   story = Story(notebook=notebook, title=story_title, created=date, description=description, 
 		comment=comments, contributor=contrib, subject=subject, keyword=keyword, pages=pages )
   story.save()
-  
+  i=1
   for page in required:
     page_path = page.firstChild.nodeValue
     page_uuid = uuid.uuid4()
-    page_entry = Page(story = story, filename = page_path, uuid = page_uuid)
+    page_entry = Page(story = story, filename = page_path, uuid = page_uuid,number=i)
+    i+=1
     page_entry.save()
   
   print "# pages: ", pages

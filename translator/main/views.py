@@ -1,12 +1,17 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from django.http import Http404
 
 # DOM
+import json
 from xml.dom.minidom import parse, parseString
 
+from main.models import *
 from main.forms import *
+
+MEDIA_ROOT = ""
 
 def responseDict(request,base):
     if request.user.is_authenticated:
@@ -18,47 +23,66 @@ def index(request):
     return render(request, 'index.html',responseDict(request,{}))
 
 def notebook(request, book):
-    #Should be filled in from books
+    #Should be filled in from notebook
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_list = Story.objects.filter(notebook=notebook)
+    except:
+        raise Http404
     base = {}
-    base["book_title"] = "Wilhelm Bleek Notebook"
-    stories = [{"name": "The Mantis turned into a hartebeest.",
-        "author": "|| kabo (Jantje)", "url":("/%s/%s/" % (book, "101")) },
-        {"name": "The Mantis turned is a bitch.",
-        "author": "|| kabo ()", "url":("/%s/%s/" % (book, "102")) }]
+    base["book_title"] = notebook.title
+    stories = []
+    for story in story_list:
+        current_story = {"name": story.title,
+        "author": ", ".join(json.loads(story.contributor)), "url":("/story/%s/%s/" % (notebook.short_title, story.id)) }
+        stories.append(current_story)
     base["book"] = stories
     return render(request, 'notebook.html' , responseDict(request,base))
 
 def story(request, book, story):
-    #Should be filled in from books
-    dom = parse("/home/michiel/git/translate/101.metadata")
-    resource = dom.getElementsByTagName("resource")[0]
+    #Should be filled in from story
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_book = Story.objects.get(notebook=notebook,id=story)
+    except:
+        raise Http404
     base = {}
-    base["story_title"] = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
-    base["contributors"] = ", ".join([x.firstChild.nodeValue
-        for x in resource.getElementsByTagName("dcterms:contributor") ])
-    base["pages"] = xrange(1,len(resource.getElementsByTagName("dcterms:requires"))+1)
-    base["date"] = resource.getElementsByTagName("dcterms:created")[0].firstChild.nodeValue
-    base["description"] = resource.getElementsByTagName("dc:description")[0].firstChild.nodeValue
-    base["comments"] = resource.getElementsByTagName("bl:comments")[0].firstChild.nodeValue
-    base["subjects"] = [sub.firstChild.nodeValue for sub in resource.getElementsByTagName("dc:subject")]
-    keywords = []
-    temp = dom.getElementsByTagName("bl:keywords")[0]
-    for word in temp.getElementsByTagName("bl:keyword"):
-        k = word.getElementsByTagName("bl:kw")[0].firstChild.nodeValue
-        subkw = word.getElementsByTagName("bl:subkeywords")[0]
-        v = ", ".join(sub.firstChild.nodeValue
-                for sub in subkw.getElementsByTagName("bl:subkw"))
-        keywords.append((k, v))
-    base["keywords"] = keywords
+    if request.user.is_authenticated():
+        #project
+        try:
+            project = Project.objects.get(user=request.user,story=story_book)
+            base["project"] = True
+        except:
+            pass
+    base["story_title"] = story_book.title
+    base["contributors"] = ", ".join(json.loads(story_book.contributor))
+    base["pages"] = xrange(1,story_book.pages+1)
+    base["date"] = story_book.created
+    base["description"] = story_book.description
+    base["comments"] = story_book.comment
+    base["subjects"] = json.loads(story_book.subject)
+    base["keywords"] = json.loads(story_book.keyword)
     return render(request, 'story.html' , responseDict(request,base))
 
 def page(request, book, story, page):
-    dom = parse("/home/michiel/git/translate/101.metadata")
-    resource = dom.getElementsByTagName("resource")[0]
+    try:
+        notebook = Notebook.objects.get(short_title=book)
+        story_book = Story.objects.get(notebook=notebook,id=story)
+        page_object = Page.objects.get(story=story_book,number=page)
+    except:
+        raise Http404
     base = {}
-    base["story_title"] = resource.getElementsByTagName("dc:title")[0].firstChild.nodeValue
-    base["pages"] = xrange(1,len(resource.getElementsByTagName("dcterms:requires"))+1)
+    if request.user.is_authenticated():
+        #project
+        try:
+            project = Project.objects.get(user=request.user,story=story_book)
+            base["project"] = True
+        except:
+            pass
+    base["story_title"] = story_book.title
+    base["pages"] = xrange(1,story_book.pages+1)
     base["page_num"] = int(page)
+    base["uuid"] = page_object.uuid
     return render(request, 'page.html' , responseDict(request,base))
 
 
@@ -98,4 +122,40 @@ def logoutView(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+def get_image(request, image):
+    try:
+        page = Page.objects.get(uuid=image)
+    except:
+        raise Http404
+    filename = page.filename
+    response = HttpResponse(mimetype='image/jpeg')
+    print "HERE"
+    try:
+        f = file(MEDIA_ROOT+ filename)
+    except:
+        raise Http404
+    response.write(f.read())
+    return response
+
+#AJAX
+def start_project(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            query = request.POST
+            book = query["book"]
+            story=query["story"]
+            try:
+                print book,story
+                notebook = Notebook.objects.get(short_title=book)
+                story_book = Story.objects.get(notebook=notebook,id=story)
+                print notebook.short_title, story_book.id
+            except:
+                raise Http404
+            obj, created = Project.objects.get_or_create(user=request.user,story=story_book,
+                    defaults={"notes":""})
+            return HttpResponse(str(created))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseBadRequest()
 

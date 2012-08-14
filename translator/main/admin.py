@@ -4,7 +4,7 @@ from main.models import *
 class NotebookAdmin(admin.ModelAdmin):
     list_display = ('title',)
 class StoryAdmin(admin.ModelAdmin):
-    list_display = ('notebook','title','pages')
+    list_display = ('id','notebook','title','pages')
 class PageAdmin(admin.ModelAdmin):
     list_display = ('filename',)
 class ProjectAdmin(admin.ModelAdmin):
