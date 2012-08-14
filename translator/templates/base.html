@@ -1,36 +1,58 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css" />
-    <script type="text/javascript" src="{{ STATIC_URL }}jquery.min.js"></script>
-    {% block extra_css %}{% endblock %}
-  </head>
-  <body>
-      <h2>From base template</h2>
-      <hr/>
-      This is a Test
-      {% if user %}
-        <div id="welcome">Welcome {{ user }}(<a href="/logout">logout</a>)</div>
-      {% else %}
-      <div id="welcome"><a href="/login">Login</a>/<a href="/register">Register</a></div>
-      {% endif %}
-      <hr/>
-      <div>
-          <div id="navigation">
-              <h3>Navigation</h3>
-		<ul>
-		<li><a href="/story/dorotheableek">Dorothea Bleek - Notebook</a></li>
-		<li><a href="/story/jemimableek">Jemima Bleek - Notebook</a></li>
-		<li><a href="/story/lucylloydkora">Lucylloyd Kora - Notebook</a></li>
-		<li><a href="/story/lucylloydkun">Lucylloyd Kun - Notebook</a></li>
-		<li><a href="/story/lucylloydxam">Lucylloyd Xam - Notebook</a></li>
-		<li><a href="/story/wilhelmbleek">Wilhelm Bleek - Notebook</a></li>
-		</ul>
- 	           
-          </div>
-          <div id="content">
-              {% block content %}{% endblock %}
-          </div>
-      </div>
-  </body>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}base.css" />
+        <script type="text/javascript" src="{{ STATIC_URL }}jquery.min.js"></script>
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body>
+        <div id="head-container">
+            <div id="header">
+                <h1>
+                    Digital Bleek and Lloyd Translation Project
+                </h1>
+            </div>
+        </div>
+        <div id="navigation-container">
+            <div id="navigation">
+		
+                {% if user %}
+                <div id="welcome">Welcome {{ user }}(<a href="/logout">logout</a>)</div>
+                {% else %}
+                <div id="welcome">
+		  <a href="/login">Login</a>
+		  <a href="/register">Register</a>
+		</div>
+                {% endif %}
+            </div>
+        </div>
+        <div id="content-container">
+            <div id="left-nav">
+	      <div id="project-nav">
+		  <h3>Projects</h3>
+		  </br>
+		</div>
+	      <div id="story-nav">
+		  <h3>Stories</h3>
+		  <ul>
+		      <li><a href="/story/dorotheableek">Dorothea Bleek</a></li>
+		      <li><a href="/story/jemimableek">Jemima Bleek</a></li>
+		      <li><a href="/story/lucylloydkora">Lucylloyd Kora</a></li>
+		      <li><a href="/story/lucylloydkun">Lucylloyd Kun</a></li>
+		      <li><a href="/story/lucylloydxam">Lucylloyd Xam</a></li>
+		      <li><a href="/story/wilhelmbleek">Wilhelm Bleek</a></li>
+		  </ul>
+		</div>
+            </div>
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <div id="footer-container">
+            <div id="footer">
+                WWW Translation Tool 2012
+            </div>
+        </div>
+    </body>
 </html>
