@@ -3,6 +3,7 @@ from django.shortcuts import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.http import Http404
+from django.shortcuts import redirect
 
 # DOM
 import json
@@ -16,16 +17,14 @@ MEDIA_ROOT = "/home/ttrewartha/www/archive/lloydbleek/"
 def responseDict(request,base):
     print int(request.user.is_authenticated())
     if request.user.is_authenticated():
-        print "test"
         base['user_o'] = request.user.username
-        base['projects'] = [ ( ("/story/%s/%s/" % (pro.story.notebook.short_title, 
-                                       pro.story.id)), pro.story.title)
+        base['projects'] = [ ( pro.story.notebook.short_title, pro.story.id, pro.story.title)
                                        for pro in Project.objects.filter(user=request.user) ]
     return base
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html',responseDict(request,{}))
+    return render(request, 'main/index.html',responseDict(request,{}))
 
 def notebook(request, book):
     #Should be filled in from notebook
@@ -39,10 +38,10 @@ def notebook(request, book):
     stories = []
     for story in story_list:
         current_story = {"name": story.title,
-        "author": ", ".join(json.loads(story.contributor)), "url":("/story/%s/%s/" % (notebook.short_title, story.id)) }
+                "author": ", ".join(json.loads(story.contributor)), "short_title":notebook.short_title, "id":story.id }
         stories.append(current_story)
     base["book"] = stories
-    return render(request, 'notebook.html' , responseDict(request,base))
+    return render(request, 'main/notebook.html' , responseDict(request,base))
 
 def story(request, book, story):
     #Should be filled in from story
@@ -68,7 +67,7 @@ def story(request, book, story):
     base["comments"] = story_book.comment
     base["subjects"] = json.loads(story_book.subject)
     base["keywords"] = json.loads(story_book.keyword)
-    return render(request, 'story.html' , responseDict(request,base))
+    return render(request, 'main/story.html' , responseDict(request,base))
 
 def page(request, book, story, page):
     try:
@@ -97,7 +96,7 @@ def page(request, book, story, page):
     if base["page_num"] != 1:
         base["page_prev"] = int(page) - 1
     base["uuid"] = page_object.uuid
-    return render(request, 'page.html' , responseDict(request,base))
+    return render(request, 'main/page.html' , responseDict(request,base))
 
 
 
@@ -112,15 +111,15 @@ def register(request):
             user = authenticate(username=username,password=password)
             if user.is_authenticated():
                 login(request,user)
-                return HttpResponseRedirect("/")
+                return redirect("main.views.index")
         #process
     else:
         form = RegisterForm()
-    return render(request, 'register.html', responseDict(request,{'form': form}))
+    return render(request, 'main/register.html', responseDict(request,{'form': form}))
 
 def loginView(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect("/")
+        return redirect("main.views.index")
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -129,14 +128,14 @@ def loginView(request):
             user = authenticate(username=username,password=password)
             if user != None:
                 login(request,user)
-                return HttpResponseRedirect("/")
+                return redirect('main.views.index')
     else:
         form = LoginForm()
-    return render(request,'login.html',responseDict(request,{'form': form}))
+    return render(request,'main/login.html',responseDict(request,{'form': form}))
 
 def logoutView(request):
     logout(request)
-    return HttpResponseRedirect("/")
+    return redirect('main.views.index')
 
 def get_image(request, image):
     try:

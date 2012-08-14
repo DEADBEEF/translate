@@ -15,11 +15,11 @@
         <div id="navigation-container">
             <div id="navigation">
                 {% if user_o %}
-                <div id="welcome">Welcome {{ user_o }}<a href="/logout">logout</a></div>
+                <div id="welcome">Welcome {{ user_o }}<a href="{% url main.views.logoutView %}">logout</a></div>
                 {% else %}
                 <div id="welcome">
-		  <a href="/login">Login</a>
-		  <a href="/register">Register</a>
+		  <a href="{% url main.views.loginView %}">Login</a>
+		  <a href="{% url main.views.register %}">Register</a>
 		</div>
                 {% endif %}
             </div>
@@ -30,21 +30,21 @@
 	      <div id="project-nav">
 		  <h3>Projects</h3>
 		  <ul>
-                  {% for url_r, p in projects %}
-                    <a href="{{url_r}}"><li>{{p}}</li></a>
-                  {% endfor %}       
+                  {% for short, id, tit in projects %}
+                    <a href="{% url main.views.story short id %}"><li>{{tit}}</li></a>
+                  {% endfor %}
 		  </ul>
 		</div>
 	      {% endif %}
 	      <div id="story-nav">
 		  <h3>Stories</h3>
 		  <ul>
-		      <li><a href="/story/dorotheableek">Dorothea Bleek</a></li>
-		      <li><a href="/story/jemimableek">Jemima Bleek</a></li>
-		      <li><a href="/story/lucylloydkora">Lucylloyd Kora</a></li>
-		      <li><a href="/story/lucylloydkun">Lucylloyd Kun</a></li>
-		      <li><a href="/story/lucylloydxam">Lucylloyd Xam</a></li>
-		      <li><a href="/story/wilhelmbleek">Wilhelm Bleek</a></li>
+              <li><a href="{% url main.views.notebook 'dorotheableek' %}">Dorothea Bleek</a></li>
+		      <li><a href="{% url main.views.notebook 'jemimableek' %}">Jemima Bleek</a></li>
+		      <li><a href="{% url main.views.notebook 'lucylloydkora' %}">Lucylloyd Kora</a></li>
+		      <li><a href="{% url main.views.notebook 'lucylloydkun' %}">Lucylloyd Kun</a></li>
+		      <li><a href="{% url main.views.notebook 'lucylloydxam' %}">Lucylloyd Xam</a></li>
+		      <li><a href="{% url main.views.notebook 'wilhelmbleek' %}">Wilhelm Bleek</a></li>
 		  </ul>
 		</div>
             </div>

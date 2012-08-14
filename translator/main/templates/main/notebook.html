@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 
 {% block title %}{{book_title}}{% endblock %}
 
@@ -7,7 +7,7 @@
 <hr/>
     <ol>
     {% for story in book %}
-        <li><a href="{{story.url}}">{{story.name}}</a> ({{story.author}})</li>
+    <li><a href="{% url main.views.story story.short_title story.id %}">{{story.name}}</a> ({{story.author}})</li>
     {% endfor %}
     </ol>
 {% endblock %}

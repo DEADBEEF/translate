@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}page.css"/>
@@ -38,7 +38,7 @@
     </div>
 </div>
 <div id="image_container">
-    <img src="/image/{{uuid}}/"/>
+    <img src="{% url main.views.get_image uuid %}"/>
 </div>
 {% if project %}
 <div id="notes_nav">

@@ -30,7 +30,7 @@ function update_translation() {
     var loc = window.location.pathname.split("/");
     var translation = $('#translation').val();
     xss_protect();
-    $.post("/update/page/", {translation:translation,
+    $.post("../../../../update/page/", {translation:translation,
     notebook:loc[2], story:loc[3],page:loc[4]}
     , function() {
         dirty_translate = false;
@@ -44,7 +44,7 @@ function update_note() {
         //Push changes
         dirty_notes = false;
         xss_protect();
-        $.post("/update/notes/", {note:old_notes,
+        $.post("../../../../update/notes/", {note:old_notes,
             field:active_notes, notebook:loc[2],
             story:loc[3]},
             function(){});
@@ -53,7 +53,7 @@ function update_note() {
 
 function get_note(note){
     var loc = window.location.pathname.split("/");
-    $.get("/get/notes/", {field:note, notebook:loc[2],
+    $.get("../../../../get/notes/", {field:note, notebook:loc[2],
         story: loc[3]},function (data) {
         $("#note_area").val(data);
         if (note == "project") {

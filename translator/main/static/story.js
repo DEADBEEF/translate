@@ -35,7 +35,7 @@ $(document).ready(function () {
     $("#project").bind('click', function() {
         var loc = window.location.pathname.split("/");
         xss_protect();
-        $.post("/project/start/", {"book": loc[2],
+        $.post("../../../project/start/", {"book": loc[2],
             "story":loc[3]},
             function(result) {
                 $("#project").remove();
