@@ -36,12 +36,14 @@
 
 #notes_nav {
     display:inline-block;
-    float:left;
+    float:right;
     height: 370px;
     width:150px;
-    border-style: solid;
-    border-width: 1px;
-    margin-left: 10px;
+    padding-left: 15px;
+    padding-top: 10px;
+    border-radius:20px;
+    -moz-border-radius:20px;
+    background-color:#CFCFF4;
 }
 
 #notes_nav > ul{
@@ -103,11 +105,46 @@
 }
 
 #bottom_tools {
-    background-color: #c66;
     display: inline-block;
-    margin-top: 10px;
-    margin-left: 35px;
-    margin-bottom: 15px;
+    margin-top: 20px;
     width: 720px;
+    border-top-left-radius:20px;
+    -moz-border-top-left-radius:20px;
+    border-top-right-radius:20px;
+    -moz-border-top-right-radius:20px;
+    background-color:#CFCFF4;
 }
 
+.pagenav {
+	margin-left: 30px;
+	margin-right: auto;
+	width: 100%;
+	margin-bottom: 10px;
+}
+.pagenav table {
+     width: 100%;
+     border-style: solid;
+     border-width: 1px;
+     margin-left: -3px;
+     margin-bottom: 10px;
+}
+
+.pagenav #inner{
+	width: 720px;
+	display: block;
+}
+
+.pagenav span{
+	text-align: center;
+	display: inline-block;
+	width: 25px;
+	margin-left: -3px;
+	margin-right: -2px;
+	margin-bottom: -1px;
+	border-style: solid;
+	border-width: 1px;
+}
+
+#right {
+   text-align: right;
+}

@@ -4,6 +4,9 @@
 	background-color: #ccc;
 	height:90px;
 }
+#head-container  a {
+    text-decoration: none;
+}
 
 #header
 {
@@ -12,8 +15,14 @@
 	width: 860px;
 	padding: 20px;
 	background: #1111C9;
-	border-radius:20px;
-	-moz-border-radius:20px; /* Firefox 3.6 and earlier */
+	border-bottom-right-radius:20px;
+	border-bottom-left-radius:20px;
+	-moz-border-bottom-right-radius:20px;
+	-moz-border-bottom-left-radius:20px;
+}
+
+#welcome {
+    height: 29px;
 }
 
 #header h1 
@@ -21,6 +30,10 @@
   margin: 0; 
   color: #FFF;
   text-align:center
+}
+
+#project-nav {
+  margin-bottom: 30px;
 }
 
 #navigation-container
@@ -68,8 +81,8 @@
 #content
 {
 	float: left;
-	width: 700px;
-	padding: 20px 0;
+	width: 790px;
+	padding-top: 20px;
 	/*margin: 0 0 0 30px;*/
 	display: inline;
 }
@@ -81,12 +94,25 @@
 	float: left;
 	width: 200px;
 	padding: 20px 0 100px;
-	margin: 15px 20px 15px 0;
+	margin: 0px 20px 15px 0;
 	display: inline;
 	background-color: #CFCFF4;
 	/*border:1px solid #a1a1a1;*/
-	border-radius:20px;
-	-moz-border-radius:20px; /* Firefox 3.6 and earlier */
+	border-bottom-right-radius:20px;
+	-moz-border-bottom-right-radius:20px;
+}
+
+#left-nav  a {
+    text-decoration: none;
+    color: #11c;
+}
+
+#left-nav  a:link {
+    color: #11c;
+}
+
+#left-nav  a:visited {
+    color: #11c;
 }
 
 #left-nav h3 { margin: 0; }

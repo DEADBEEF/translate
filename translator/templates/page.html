@@ -9,15 +9,33 @@
 
 {% block content %}
 <a href=".."><h3>{{ story_title }}</h3></a>
-<div id="page_num">
-    <div id="page_id">Page - {{page_num}}</div>
-    {% for p in pages %}
+<div class="pagenav">
+    <div id="page_id">
+        <table>
+        <tr><td>
+          {% if page_prev %}
+          <a href="../{{page_prev}}">Previous</a>
+          {% endif %}
+         </td>
+         <td>Page - {{page_num}}</td>
+        <td id="right">
+          {% if page_next %}
+          <a href="../{{page_next}}">Next</a>
+          {% endif %}
+         </td>
+        </tr>
+        </table>
+
+    </div>
+    <div id="inner">
+        {% for p in pages %}
         {% if p == page_num %}
         <span>{{p}}</span>
         {% else %}
         <span><a href="../{{p}}/">{{p}}</a></span>
         {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 <div id="image_container">
     <img src="/image/{{uuid}}/"/>
