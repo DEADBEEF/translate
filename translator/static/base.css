@@ -1,0 +1,129 @@
+#head-container
+{
+	color: #000;
+	background-color: #ccc;
+	height:90px;
+}
+
+#header
+{
+	margin: 0 auto;
+	margin-bottom: 15px;
+	width: 860px;
+	padding: 20px;
+	background: #1111C9;
+	border-radius:20px;
+	-moz-border-radius:20px; /* Firefox 3.6 and earlier */
+}
+
+#header h1 
+{ 
+  margin: 0; 
+  color: #FFF;
+  text-align:center
+}
+
+#navigation-container
+{
+	float: left;
+	width: 100%;
+	color: #000;
+	background: #333;
+}
+
+#navigation
+{
+	margin: 0 auto;
+	width: 900px;
+	color: #FFF;
+	text-decoration: none;
+	/*display: block;*/
+	/*padding: 5px 10px;*/
+}
+
+#navigation a
+{
+	display: block;
+	float: right;
+	padding: 5px 10px;
+	color: #fff;
+	text-decoration: none;
+	border-right: 1px solid #fff;
+}
+
+#navigation a:hover 
+{ 
+  background: #ccc; 
+  color: #1111C9;
+}
+
+#content-container
+{
+	float: left;
+	width: 100%;
+	color: #000;
+	background: #eee;
+}
+
+#content
+{
+	float: left;
+	width: 700px;
+	padding: 20px 0;
+	/*margin: 0 0 0 30px;*/
+	display: inline;
+}
+
+#content h2 { margin: 0; }
+
+#left-nav
+{
+	float: left;
+	width: 200px;
+	padding: 20px 0 100px;
+	margin: 15px 20px 15px 0;
+	display: inline;
+	background-color: #CFCFF4;
+	/*border:1px solid #a1a1a1;*/
+	border-radius:20px;
+	-moz-border-radius:20px; /* Firefox 3.6 and earlier */
+}
+
+#left-nav h3 { margin: 0; }
+
+#left-nav ul
+{
+  list-style-type:none;
+  margin: 0;
+}
+
+#left-nav ul li
+{
+  
+}
+
+#left-nav ul li a
+{
+  color: #1111C9;
+}
+
+#left-nav h3
+{
+  text-align:center
+}
+
+#footer-container
+{
+	clear: left;
+	color: #fff;
+	background: #000;
+}
+
+#footer
+{
+	margin: 0 auto;
+	width: 900px;
+	text-align: right;
+	padding: 20px;
+	height: 1%;
+}
