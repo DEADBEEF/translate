@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     # Examples:
     #AJAX
     url(r'^project/start/$', 'main.views.start_project'),
+    url(r'^update/page/$', 'main.views.update_page_translation'),
+    url(r'^update/notes/$', 'main.views.update_notes'),
+    url(r'^get/notes/$', 'main.views.get_note'),
     # url(r'^$', 'translator.views.home', name='home'),
     # url(r'^translator/', include('translator.foo.urls')),
 
